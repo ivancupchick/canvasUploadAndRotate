@@ -1,0 +1,30 @@
+.main {
+  padding: 20px;
+  width: 500px;
+  background: #ccc;
+  border: 10px solid #ddd;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.buttonCapture {
+display: block;
+margin: 10px 0;
+padding: 10px 20px;
+background: cornflowerblue;
+color: #fff;
+text-align: center;
+text-decoration: none;
+}
+
+#photoCanvas {
+  display: none;
+}
+#mainCanvas {
+  margin-bottom: 20px;
+}
+#photo {
+  display: none;
+}
