@@ -11,6 +11,8 @@ class UI {
     this.buttonCapture = getId('buttonCapture');
     this.mainCanvas = getId('mainCanvas');
     this.mainContext = this.mainCanvas.getContext('2d');
+    this.isDown = false;
+    this.angle = 0;
     this.centerOfMainCanvas = { 
       x: this.mainCanvas.width / 2, 
       y: this.mainCanvas.height / 2 
@@ -26,8 +28,8 @@ class UI {
     this.mainContext.translate(this.centerOfMainCanvas.x, this.centerOfMainCanvas.y);
   }
 
-  rotateMainCanvas(angle) {
-    this.mainContext.rotate(angle);
+  rotatePhotoCanvas() {
+    this.mainContext.rotate(this.angle);
     this.mainContext.drawImage(this.photoCanvas, -(this.photoCanvas.width / 2), -(this.photoCanvas.height / 2));
     this.mainContext.restore();
   }
@@ -56,7 +58,23 @@ window.onload = () => {
     ui.photo.setAttribute('src', ui.photoCanvas.toDataURL('image/png')); 
   });
   
-  ui.mainCanvas.addEventListener('mousemove', (event) => {
+  ui.mainCanvas.addEventListener('mousedown', event => {
+    ui.isDown = true;
+  })
+
+  ui.mainCanvas.addEventListener('mouseup', event => {
+    ui.isDown = false;
+  })
+
+  ui.mainCanvas.addEventListener('mouseout', event => {
+    ui.isDown = false;
+  })
+
+  ui.mainCanvas.addEventListener('mousemove', event => {
+    if (!ui.isDown) {
+      return;
+    }
+
     ui.clearMainCanvas();
 
     let offset = {
@@ -64,10 +82,10 @@ window.onload = () => {
       dy: event.offsetY - ui.centerOfMainCanvas.y
     };
 
-    let angle = Math.atan(offset.dy / offset.dx);
+    ui.angle = Math.atan(offset.dy / offset.dx);
 
-    if (offset.dx < 0) angle += Math.PI;
+    if (offset.dx < 0) ui.angle += Math.PI;
 
-    ui.rotateMainCanvas(angle);
-  }, false);
+    ui.rotatePhotoCanvas();
+  }, false)
 };
