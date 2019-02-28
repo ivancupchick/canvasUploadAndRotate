@@ -55,7 +55,9 @@ window.onload = () => {
 
   ui.buttonCapture.addEventListener('click', function() {
     ui.photoContext.drawImage(ui.video, 0, 0, 400, 300);
-    ui.photo.setAttribute('src', ui.photoCanvas.toDataURL('image/png')); 
+    ui.photo.setAttribute('src', ui.photoCanvas.toDataURL('image/png'));
+    ui.clearMainCanvas();
+    ui.rotatePhotoCanvas(); 
   });
   
   ui.mainCanvas.addEventListener('mousedown', event => {
