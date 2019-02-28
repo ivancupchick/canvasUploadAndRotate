@@ -12,6 +12,7 @@ class UI {
     this.mainCanvas = getId('mainCanvas');
     this.mainContext = this.mainCanvas.getContext('2d');
     this.isDown = false;
+    this.previouslyAngle = 0;
     this.angle = 0;
     this.centerOfMainCanvas = { 
       x: this.mainCanvas.width / 2, 
@@ -62,13 +63,26 @@ window.onload = () => {
   
   ui.mainCanvas.addEventListener('mousedown', event => {
     ui.isDown = true;
+    
+    let offset = {
+      dx: event.offsetX - ui.centerOfMainCanvas.x,
+      dy: event.offsetY - ui.centerOfMainCanvas.y
+    };
+    
+    ui.angle = Math.atan(offset.dy / offset.dx);
+
+    if (offset.dx < 0) ui.angle += Math.PI;
+    
+    ui.previouslyAngle = ui.previouslyAngle - ui.angle;
   })
 
   ui.mainCanvas.addEventListener('mouseup', event => {
+    ui.previouslyAngle = ui.angle;
     ui.isDown = false;
   })
 
   ui.mainCanvas.addEventListener('mouseout', event => {
+    ui.previouslyAngle = ui.angle;
     ui.isDown = false;
   })
 
@@ -83,10 +97,12 @@ window.onload = () => {
       dx: event.offsetX - ui.centerOfMainCanvas.x,
       dy: event.offsetY - ui.centerOfMainCanvas.y
     };
-
+    
     ui.angle = Math.atan(offset.dy / offset.dx);
 
     if (offset.dx < 0) ui.angle += Math.PI;
+
+    ui.angle = ui.previouslyAngle + ui.angle;
 
     ui.rotatePhotoCanvas();
   }, false)
